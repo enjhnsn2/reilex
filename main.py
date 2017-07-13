@@ -1,5 +1,5 @@
 from loader import *
-
+from emulation import *
 
 
 
@@ -7,9 +7,10 @@ b = load_elf("tests/cap_bin")
 print b.text_start
 print b.text_size
 il_b = b.lift()
-for i in il_b:
-	print i
+#for i in il_b:
+#	print i
 
+eager_engine(il_b)
 
 a = load_elf("tests/lab1A")
 print a.text_start

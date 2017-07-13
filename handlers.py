@@ -2,32 +2,6 @@
 #Array of function pointers to various instruction handlers
 #indexed by definitions of instructions in reil/definitions
 
-ins_handler = [
-	handle_add,
-	handle_and,
-	handle_bisz,
-	handle_div,
-	handle_jcc,
-	handle_ldm,
-	handle_mod,
-	handle_mul,
-	handle_nop,
-	handle_or,
-	handle_stm,
-	handle_str,
-	handle_sub,
-	handle_undef,
-	handle_ukn,
-	handle_xor,
-	handle_bisnz,
-	handle_equ,
-	handle_lshl,
-	handle_lshr,
-	handle_ashr,
-	handle_sdiv,
-	handle_sex,
-	handle_sys
-	]
 
 #r_ins stands for reil instruction
 def handle_add(r_ins):
@@ -101,3 +75,31 @@ def handle_sex(r_ins):
 
 def handle_sys(r_ins):
 	print "sys_handled"
+
+
+ins_handler = [
+	handle_add,
+	handle_and,
+	handle_bisz,
+	handle_div,
+	handle_jcc,
+	handle_ldm,
+	handle_mod,
+	handle_mul,
+	handle_nop,
+	handle_or,
+	handle_stm,
+	handle_str,
+	handle_sub,
+	handle_undef,
+	handle_ukn,
+	handle_xor,
+	handle_bisnz,
+	handle_equ,
+	handle_lshl,
+	handle_lshr,
+	handle_ashr,
+	handle_sdiv,
+	handle_sex,
+	handle_sys
+	]
