@@ -20,8 +20,12 @@ for i in il_a:
 	print i
 
 
-#a.f_head.print_h()
-#c = b.lift(b.get_text_start_64(), b.get_text_size_64()) 
+state123 = state()
+ast123 = AST_generate(state123,il_a)
+#AST_to_string(ast123)
+print ast123
+print state123
+
 
 
 """

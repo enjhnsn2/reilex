@@ -1,16 +1,15 @@
 from handlers import *
-#Input: Instruction stream
+from riel.definitions import *
 
 #instructions = stream of ins
 #ins = assembly instruction
 #r_ins = reil instruction
 
-#Experimental symbolic engine
-#Will build lazy engine later as it's more complicated
 
 
-
-
+#Registers and memory are initialized during execution
+#Ideally this will make register infrastructure the same 
+#with different architectures
 class state:
 	def __init__(self):
 		registers ={} 
@@ -32,6 +31,17 @@ class state:
 			registers[reg] = expr
 
 
+#Assumption: reg has been intialized in the state
+#Input: prints current symbolic state of register
+	def print_reg(self,reg):
+		print_expression(registers[reg])
+
+def print_expression(expr):
+	if type(expr.op1) != expression and type(expr.op2) != expression:
+		ins_handler[expr.operator]
+
+
+
 """
 #Abstract syntax tree will be tree of these
 #Op1 and Op2 can be:
@@ -48,11 +58,14 @@ class expression:
 		self.op2 = op2
 
 
-
+#currently stateful
 def AST_generate(state, instructions):
-	for ins in il_instructions:
+	for ins in instructions:
 		for il_ins in ins.il_instructions:
-			state.update_reg(reg, expr(il_ins.opcode, il_ins.input0, il_ins.input1))
+			state.update_reg(reg,expr(il_ins.opcode, il_ins.input0, il_ins.input1))
+
+
+
 
 
 
