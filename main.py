@@ -25,6 +25,8 @@ ast123 = AST_generate(state123,il_a)
 #AST_to_string(ast123)
 print ast123
 print state123
+print "lmao"
+print_expression(ast123)
 
 
 

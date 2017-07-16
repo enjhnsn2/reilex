@@ -1,5 +1,5 @@
 from handlers import *
-from riel.definitions import *
+from reil.definitions import *
 
 #instructions = stream of ins
 #ins = assembly instruction
@@ -36,11 +36,40 @@ class state:
 	def print_reg(self,reg):
 		print_expression(registers[reg])
 
+#def print_expression(expr):
+#	if type(expr.op1) != expression and type(expr.op2) != expression:
+#		ins_handler[expr.operator]
+
+
+def op_to_string(op):
+	op_type = type(op)
+	if op_type == registeroperand:
+		return op.name
+	elif op_type == immediateoperand:
+		return str(op.value)
+	elif op_type == temporaryoperand:
+		return op.name
+	elif op_type == offsetoperand:
+		return str(op.offset)
+	else:
+		return ""
+
+#Input: Expression
+#Output: string representation of that string
 def print_expression(expr):
-	if type(expr.op1) != expression and type(expr.op2) != expression:
-		ins_handler[expr.operator]
+	if expr is None:
+		return ""
+	if type(expr.op1) != expression:
+		op1_string = op_to_string(expr.op1)
+	else:
+		op1_string = print_expression(expr.op1)
 
+	if type(expr.op2) != expression:
+		op2_string = op_to_string(expr.op2)
+	else:
+		op2_string = print_expression(expr.op2)
 
+	return "(" + op1_string + " " + _opcode_to_string(expr.opcode) + " " + op2_string + ")"
 
 """
 #Abstract syntax tree will be tree of these
@@ -60,9 +89,11 @@ class expression:
 
 #currently stateful
 def AST_generate(state, instructions):
+	expr = expression()
 	for ins in instructions:
 		for il_ins in ins.il_instructions:
 			state.update_reg(reg,expr(il_ins.opcode, il_ins.input0, il_ins.input1))
+
 
 
 
@@ -77,4 +108,4 @@ def eager_engine(instructions):
 			
 
 
-#def lazy_engine(instructions):
+
