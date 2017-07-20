@@ -16,7 +16,7 @@ instrs_c = c.lift()
 
 
 new_state = state()
-new_state = new_state.execute(instrs_c)
+new_state = new_state.execute(instrs_b)
 
 for reg in new_state.registers:
 	print reg , " = ", new_state.registers[reg].to_string()
