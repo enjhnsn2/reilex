@@ -40,13 +40,34 @@ class state:
 #Is there a better way to do it than isinstance???
 	def update_state(self,output,expr):
 		if isinstance(output, RegisterOperand):
-			self.update_reg(output.name, RegisterOperand)
+			self.update_reg(output.name, expr)
 		elif isinstance(output, TemporaryOperand):
-			self.update_temp(output.name, TemporaryOperand)
+			self.update_temp(output.name, expr)
 		elif isinstance(output, ImmediateOperand):
-			self.update_mem(output.value, ImmediateOperand)
-		else print "WHOOPS"
+			self.update_mem(output.value, expr)
+		else print "Something in update_state went wrong"
 
+
+	def fetch_reg(self, reg):
+		return registers[reg]
+
+	def fetch_reg(self, reg):
+		return temp_registers[reg]
+
+	def fetch_reg(self, addr):
+		return memory[addr]
+
+	#takes in an operand and returns the expression it represents in the current state
+	#If it doesn't currently have a state, create a new bitvector
+	def fetch_op(self, op):
+		if isinstance(output, RegisterOperand):
+			return self.fetch_reg(output.name, RegisterOperand)
+		elif isinstance(output, TemporaryOperand):
+			return self.fetch_temp(output.name, TemporaryOperand)
+		elif isinstance(output, ImmediateOperand):
+			return self.fetch_mem(output.value, ImmediateOperand)
+		else print "Something in fetch_op went wrong"
+		return 0
 
 	#execute a single REIL instruction on the state
 	def step(self, il_ins):
@@ -55,7 +76,11 @@ class state:
 		output = il_ins.output
 		opcode = il_ins.opcode
 
-		result = ins_handler[opcode](input0,input1,output) # returns expression formed by instruction
+		in0 = self.fetch_op(input0)
+		in1 = self.fetch_op(input1)
+
+
+		result = ins_handler[opcode](in0,in1) # returns expression formed by instruction
 		self.update_state(output, result)
 
 
