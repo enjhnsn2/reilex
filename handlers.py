@@ -1,79 +1,82 @@
-
+from z3 import *
 #Array of function pointers to various instruction handlers
 #indexed by definitions of instructions in reil/definitions
 
 
 #r_ins stands for reil instruction
-def handle_add(r_ins):
+def handle_add(input0, input1, output):
 	print "add_handled"
+	in0 = BitVec("in0", 32)#adjust size, Inherit bitvecs from state if possible
+	in1 = BitVec("in1", 32)
+	return (in0 + in1)
 
-def handle_and(r_ins):
+def handle_and(input0, input1, output):
 	print "and_handled"
 
-def handle_bisz(r_ins):
+def handle_bisz(input0, input1, output):
 	print "bisz_handled"
 
-def handle_div(r_ins):
+def handle_div(input0, input1, output):
 	print "div_handled"
 
-def handle_jcc(r_ins):
+def handle_jcc(input0, input1, output):
 	print "jcc_handled"
 
-def handle_ldm(r_ins):
+def handle_ldm(input0, input1, output):
 	print "ldm_handled"
 
-def handle_mod(r_ins):
+def handle_mod(input0, input1, output):
 	print "mod_handled"
 
-def handle_mul(r_ins):
+def handle_mul(input0, input1, output):
 	print "mul_handled"
 
-def handle_nop(r_ins):
+def handle_nop(input0, input1, input2):
 	print "nop_handled"
 
-def handle_or(r_ins):
+def handle_or(input0, input1, input2):
 	print "or_handled"
 
-def handle_stm(r_ins):
+def handle_stm(input0, input1, input2):
 	print "stm_handled"
 
-def handle_str(r_ins):
+def handle_str(input0, input1, input2):
 	print "str_handled"
 
-def handle_sub(r_ins):
+def handle_sub(input0, input1, input2):
 	print "sub_handled"
 
-def handle_undef(r_ins):
+def handle_undef(input0, input1, input2):
 	print "undef_handled"
 
-def handle_ukn(r_ins):
+def handle_ukn(input0, input1, input2):
 	print "ukn_handled"
 
-def handle_xor(r_ins):
+def handle_xor(input0, input1, input2):
 	print "xor_handled"
 
-def handle_bisnz(r_ins):
+def handle_bisnz(input0, input, output):
 	print "bisnz_handled"
 
-def handle_equ(r_ins):
+def handle_equ(input0, input, output):
 	print "equ_handled"
 
-def handle_lshl(r_ins):
+def handle_lshl(input0, input, output):
 	print "lshl_handled"
 
-def handle_lshr(r_ins):
+def handle_lshr(input0, input, output):
 	print "lshr_handled"
 
-def handle_ashr(r_ins):
+def handle_ashr(input0, input, output):
 	print "ashr_handled"
 
-def handle_sdiv(r_ins):
+def handle_sdiv(input0, input, output):
 	print "sdiv_handled"
 
-def handle_sex(r_ins):
+def handle_sex(input0, input, output):
 	print "sex_handled"
 
-def handle_sys(r_ins):
+def handle_sys(input0, input, output):
 	print "sys_handled"
 
 
