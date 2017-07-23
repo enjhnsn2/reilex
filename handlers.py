@@ -12,103 +12,105 @@ from z3 import *
 #TODO:--------------
 #handle_sex, handle_sys, handle_jcc, make sure signed/unsigned works
 
+#Size = bits of output
 
-def handle_add(in0, in1):
+def handle_add(in0, in1, size):
 	print "add_handled"
 	return (in0 + in1)
 
-def handle_and(in0, in1):
+def handle_and(in0, in1, size):
 	print "and_handled"
 	return (in0 & in1)
 
-def handle_bisz(in0, in1):
+def handle_bisz(in0, in1, size):
 	print "bisz_handled"
 	return in0 == 0
 
 #TODO: implement
-def handle_bsh(in0, in1):
+def handle_bsh(in0, in1, size):
 	print "bsh_handled"
 	return in0 == 0
 
 #Signed vs unsigned division?
-def handle_div(in0, in1):
+def handle_div(in0, in1, size):
 	print "div_handled"
 	return (in0 / in1)
 
-def handle_jcc(in0, in1):
+def handle_jcc(in0, in1, size):
 	print "jcc_handled"
 
-def handle_ldm(in0, in1):
+def handle_ldm(in0, in1, size):
 	print "ldm_handled"
 	return in0
 
-def handle_mod(in0, in1):
+def handle_mod(in0, in1, size):
 	print "mod_handled"
 	return (in0 % in1)
 
-def handle_mul(in0, in1):
+def handle_mul(in0, in1,size):
 	print "mul_handled"
 	return (in0 * in1)
 
-def handle_nop(in0, in1):
+def handle_nop(in0, in1, size):
 	print "nop_handled"
 
 
-def handle_or(in0, in1):
+def handle_or(in0, in1, size):
 	print "or_handled"
 	return in0 | in1
 
-def handle_stm(in0, in1):
+def handle_stm(in0, in1, size):
 	print "stm_handled"
 	return in0
 
-def handle_str(in0, in1):
+def handle_str(in0, in1, size):
 	print "str_handled"
 	return in0
 
-def handle_sub(in0, in1):
+def handle_sub(in0, in1, size):
 	print "sub_handled"
 	return in0 - in1
 
-def handle_undef(in0, in1):
+def handle_undef(in0, in1, size):
 	print "undef_handled"
 
-def handle_ukn(in0, in1):
+def handle_ukn(in0, in1, size):
 	print "ukn_handled"
 
-def handle_xor(in0, in1):
+def handle_xor(in0, in1, size):
 	print "xor_handled"
 	return in0 ^ in1
 
-def handle_bisnz(in0, in1):
+def handle_bisnz(in0, in1, size):
 	print "bisnz_handled"
 	return in0 != in1
 
-def handle_equ(in0, in1):
+def handle_equ(in0, in1, size):
 	print "equ_handled"
 	return in0 == in1
 
 
-def handle_lshl(in0, in1):
+def handle_lshl(in0, in1, size):
 	print "lshl_handled"
 	return in0 << in1
 
-def handle_lshr(in0, in1):
+def handle_lshr(in0, in1, size):
 	print "lshr_handled"
 	return in0 >> in1
 
-def handle_ashr(in0, in1):
+def handle_ashr(in0, in1, size):
 	print "ashr_handled"
 	return in0 >> in1
 
-def handle_sdiv(in0, in1):
+def handle_sdiv(in0, in1, size):
 	print "sdiv_handled"
 	return in0 / in1
 
-def handle_sex(in0, in1):
+def handle_sex(in0, in1, size):
 	print "sex_handled"
+	return in0 
 
-def handle_sys(in0, in1):
+def handle_sys(in0, in1, size):
 	print "sys_handled"
 
 

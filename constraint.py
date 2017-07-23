@@ -63,9 +63,9 @@ class state:
 
 	def fetch_mem(self, addr):
 		if addr in self.memory:
-			return self.memory[addr]
+			return self.memory[str(addr.value)]
 		else:
-			return BitVec(addr.value, addr.size)
+			return BitVec(str(addr.value), addr.size)
 
 	#Can take in immediate or other stuff
 	#takes in an operand and returns the expression it represents in the current state
