@@ -49,13 +49,23 @@ class state:
 
 
 	def fetch_reg(self, reg):
-		return registers[reg]
+		if reg in registers:
+			return registers[reg]
+		else:
+			return BitVec(reg.name,reg.size)
 
 	def fetch_reg(self, reg):
-		return temp_registers[reg]
+		if reg in registers:
+			return temp_registers[reg]
+		else:
+			return BitVec(reg.name,reg.size)
 
 	def fetch_reg(self, addr):
 		return memory[addr]
+		if addr in memory:
+			return memory[addr]
+		else:
+			return BitVec(addr.value, addr.size)
 
 	#takes in an operand and returns the expression it represents in the current state
 	#If it doesn't currently have a state, create a new bitvector

@@ -24,6 +24,7 @@ def handle_and(in0, in1):
 def handle_bisz(in0, in1):
 	print "bisz_handled"
 	return in0 == 0
+
 #Signed vs unsigned division?
 def handle_div(in0, in1):
 	print "div_handled"
@@ -34,7 +35,7 @@ def handle_jcc(in0, in1):
 
 def handle_ldm(in0, in1):
 	print "ldm_handled"
-	
+	return in0
 
 def handle_mod(in0, in1):
 	print "mod_handled"
@@ -76,6 +77,7 @@ def handle_xor(in0, in1):
 
 def handle_bisnz(in0, in1):
 	print "bisnz_handled"
+	return in0 != in1
 
 def handle_equ(in0, in1):
 	print "equ_handled"
@@ -84,9 +86,11 @@ def handle_equ(in0, in1):
 
 def handle_lshl(in0, in1):
 	print "lshl_handled"
+	return in0 << in1
 
 def handle_lshr(in0, in1):
 	print "lshr_handled"
+	retyrb in0 >> in1
 
 def handle_ashr(in0, in1):
 	print "ashr_handled"
