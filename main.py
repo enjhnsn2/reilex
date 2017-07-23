@@ -1,5 +1,5 @@
 from loader import *
-from emulation import *
+from constraint import *
 
 
 
@@ -13,12 +13,15 @@ c = load_elf("tests/moveebxeax")
 instrs_c = c.lift()
 
 
-
+#for ins in instrs_c:
+#	for il_ins in ins.il_instructions:
+#		print il_ins
 
 new_state = state()
-new_state = new_state.execute(instrs_b)
+new_state.execute(instrs_c)
+
 
 for reg in new_state.registers:
-	print reg , " = ", new_state.registers[reg].to_string()
+	print reg , " = ", new_state.registers[reg]
 #	print reg.to_string()
 

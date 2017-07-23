@@ -10,7 +10,7 @@ from z3 import *
 
 
 #TODO:--------------
-#handle_sex, handle_sys, handle_jcc
+#handle_sex, handle_sys, handle_jcc, make sure signed/unsigned works
 
 
 def handle_add(in0, in1):
@@ -23,6 +23,11 @@ def handle_and(in0, in1):
 
 def handle_bisz(in0, in1):
 	print "bisz_handled"
+	return in0 == 0
+
+#TODO: implement
+def handle_bsh(in0, in1):
+	print "bsh_handled"
 	return in0 == 0
 
 #Signed vs unsigned division?
@@ -90,7 +95,7 @@ def handle_lshl(in0, in1):
 
 def handle_lshr(in0, in1):
 	print "lshr_handled"
-	retyrb in0 >> in1
+	return in0 >> in1
 
 def handle_ashr(in0, in1):
 	print "ashr_handled"
@@ -111,6 +116,7 @@ ins_handler = [
 	handle_add,
 	handle_and,
 	handle_bisz,
+	handle_bsh,
 	handle_div,
 	handle_jcc,
 	handle_ldm,

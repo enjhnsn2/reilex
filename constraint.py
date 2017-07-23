@@ -6,7 +6,7 @@ from reil.definitions import *
 
 #fetch state -> inputs to handlers
 
-#Possibly dictionary from object to expression?
+#dictionary from names to expressions
 class state:
 	def __init__(self):
 		self.registers = {} 
@@ -45,38 +45,42 @@ class state:
 			self.update_temp(output.name, expr)
 		elif isinstance(output, ImmediateOperand):
 			self.update_mem(output.value, expr)
-		else print "Something in update_state went wrong"
+		else:
+			print "Something in update_state went wrong"
 
 
 	def fetch_reg(self, reg):
-		if reg in registers:
-			return registers[reg]
+		if reg.name in self.registers:
+			return self.registers[reg.name]
 		else:
 			return BitVec(reg.name,reg.size)
 
-	def fetch_reg(self, reg):
-		if reg in registers:
-			return temp_registers[reg]
+	def fetch_temp(self, reg):
+		if reg.name in self.registers:
+			return self.temp_registers[reg.name]
 		else:
 			return BitVec(reg.name,reg.size)
 
-	def fetch_reg(self, addr):
-		return memory[addr]
-		if addr in memory:
-			return memory[addr]
+	def fetch_mem(self, addr):
+		if addr in self.memory:
+			return self.memory[addr]
 		else:
 			return BitVec(addr.value, addr.size)
 
+	#Can take in immediate or other stuff
 	#takes in an operand and returns the expression it represents in the current state
 	#If it doesn't currently have a state, create a new bitvector
+	#TODO: HOW TO TELL DIFFERENCE BETWEEN MEMORY AND IMMEDIATE
+
 	def fetch_op(self, op):
-		if isinstance(output, RegisterOperand):
-			return self.fetch_reg(output.name, RegisterOperand)
-		elif isinstance(output, TemporaryOperand):
-			return self.fetch_temp(output.name, TemporaryOperand)
-		elif isinstance(output, ImmediateOperand):
-			return self.fetch_mem(output.value, ImmediateOperand)
-		else print "Something in fetch_op went wrong"
+		if isinstance(op, RegisterOperand):
+			return self.fetch_reg(op)
+		elif isinstance(op, TemporaryOperand):
+			return self.fetch_temp(op)
+		elif isinstance(op, ImmediateOperand):
+			return self.fetch_mem(op)
+#		else:
+#			print "Something in fetch_op went wrong"
 		return 0
 
 	#execute a single REIL instruction on the state
@@ -99,6 +103,6 @@ class state:
 	def execute(self, instructions):
 		for ins in instructions:
 			for il_ins in ins.il_instructions:
-				step(il_ins)
+				self.step(il_ins)
 				
 
