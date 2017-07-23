@@ -59,7 +59,7 @@ class state:
 			return BitVec(reg.name,reg.size)
 
 	def fetch_temp(self, reg):
-		if reg.name in self.registers:
+		if reg.name in self.temp_registers:
 			return self.temp_registers[reg.name]
 		else:
 			return BitVec(reg.name,reg.size)
