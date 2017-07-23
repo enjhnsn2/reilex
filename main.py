@@ -14,12 +14,13 @@ instrs_c = c.lift()
 
 d = load_elf("cap_bin2")
 instrs_d = d.lift()
-#for ins in instrs_c:
-#	for il_ins in ins.il_instructions:
-#		print il_ins
+
+for ins in instrs_a:
+	for il_ins in ins.il_instructions:
+		print il_ins
 
 new_state = state()
-new_state.execute(instrs_c)
+new_state.execute(instrs_d)
 
 
 for reg in new_state.registers:
