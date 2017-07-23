@@ -19,13 +19,17 @@ instrs_d = d.lift()
 #		print il_ins
 
 new_state = state()
-new_state.execute(instrs_d)
+new_state.execute(instrs_c)
 
 
 for reg in new_state.registers:
-	print type(reg)
-	print type(new_state.registers[reg])
+	print new_state.registers[reg].size()
 	print reg , " = ", new_state.registers[reg]
+
+for reg in new_state.temp_registers:
+	print new_state.temp_registers[reg].size()
+	print reg , " = ", new_state.temp_registers[reg]
+
 #	print reg.to_string()
 #rax = new_state.registers["rax"]
 #new_state.solver.add(rax < 3)

@@ -18,33 +18,36 @@ class state:
 	#Reg is string of register name
 	#expr is a bitvector
 	def update_reg(self,reg, expr):
-		if reg in self.registers:
-			self.registers[reg] = expr
+		if reg.name in self.registers:
+			self.registers[reg.name] = expr
 		else:
-			self.registers.update({reg:expr})
+			self.registers.update({reg.name:expr})
 
 	def update_temp(self,reg, expr):
-		if reg in self.temp_registers:
-			self.temp_registers[reg] = expr
+		if reg.name in self.temp_registers:
+			self.temp_registers[reg.name] = expr
 		else:
-			self.temp_registers.update({reg:expr})
+			self.temp_registers.update({reg.name:expr})
 
 
 	def update_mem(self,addr, expr):
-		if addr in self.memory:
-			self.memory[addr] = expr
+		if str(addr.value) in self.memory:
+			self.memory[str(addr.value)] = expr
 		else:
-			self.memory.update({addr:expr})
+			self.memory.update({str(addr.value):expr})
 
 
 #Is there a better way to do it than isinstance???
 	def update_state(self,output,expr):
-		if isinstance(output, RegisterOperand):
-			self.update_reg(output.name, expr)
-		elif isinstance(output, TemporaryOperand):
-			self.update_temp(output.name, expr)
-		elif isinstance(output, ImmediateOperand):
-			self.update_mem(output.value, expr)
+		if type(output) == RegisterOperand:
+#		if isinstance(output, RegisterOperand):
+			self.update_reg(output, expr)
+		elif type(output) == TemporaryOperand:
+#		elif isinstance(output, TemporaryOperand):
+			self.update_temp(output, expr)
+		elif type(output) == ImmediateOperand:
+#		elif isinstance(output, ImmediateOperand):
+			self.update_mem(output, expr)
 		else:
 			print "Something in update_state went wrong"
 
@@ -73,11 +76,14 @@ class state:
 	#TODO: HOW TO TELL DIFFERENCE BETWEEN MEMORY AND IMMEDIATE
 
 	def fetch_op(self, op):
-		if isinstance(op, RegisterOperand):
+		if type(op) == RegisterOperand:
+#		if isinstance(op, RegisterOperand):
 			return self.fetch_reg(op)
-		elif isinstance(op, TemporaryOperand):
+		elif type(op) == TemporaryOperand:
+#		elif isinstance(op, TemporaryOperand):
 			return self.fetch_temp(op)
-		elif isinstance(op, ImmediateOperand):
+		elif type(op) == ImmediateOperand:
+#		elif isinstance(op, ImmediateOperand):
 			return self.fetch_mem(op)
 #		else:
 #			print "Something in fetch_op went wrong"
