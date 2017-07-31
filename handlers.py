@@ -7,8 +7,10 @@ from z3 import *
 #returns bitvector corresponding to post operation state
 
 
+#Fetch ops -> equalize size -> compute result -> correct size -> update state
+
 #TODO:--------------
-#handle_sex, handle_sys, handle_jcc, make sure signed/unsigned works
+#handle_sex, handle_sys, handle_jcc
 
 #Insert to debug handler
 def debug_handler(il_ins):

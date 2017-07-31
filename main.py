@@ -14,12 +14,16 @@ instrs_c = c.lift()
 d = load_elf("cap_bin2")
 instrs_d = d.lift()
 
-#for ins in instrs_a:
-#	for il_ins in ins.il_instructions:
-#		print il_ins
+e = load_elf("tests/jmp_test")
+instrs_e = e.lift()
+
+for ins in instrs_e:
+	print ins.address
+	for il_ins in ins.il_instructions:
+		print il_ins
 
 new_state = state()
-new_state.execute(instrs_a)
+new_state.execute(instrs_e)
 
 
 for reg in new_state.registers:
@@ -31,8 +35,8 @@ for reg in new_state.temp_registers:
 	print reg , " = ", new_state.temp_registers[reg]
 
 
-of = new_state.registers["of"]
-ebp = new_state.registers["ebp"]
-new_state.solver.add(ebp == 0)
-print new_state.solver.check()
+#of = new_state.registers["of"]
+#ebp = new_state.registers["ebp"]
+#new_state.solver.add(ebp == 0)
+#print new_state.solver.check()
 #print new_state.solver.model()

@@ -1,12 +1,12 @@
 from handlers import *
 from reil.definitions import *
 
-#registers = dictionary of Z3 BitVecRef
-#memory = dictionary of Z3 BitVecRef
+#registers = dictionary of Z3 BitVecRef/BitVecVal
+#temp_registers = dictionary of Z3 BitVecRef/BitVecVal
+#memory = dictionary of Z3 BitVecRef/BitVecVal
+#post_condition: currently unused
+#Solver: allows for soliving by using z3, might be refactored to elsewhere
 
-#fetch state -> inputs to handlers
-
-#dictionary from names to expressions
 class state:
 	def __init__(self):
 		self.registers = {} 
@@ -17,6 +17,7 @@ class state:
 
 	#Reg is string of register name
 	#expr is a bitvector
+	#Update reg to be equal to expr
 	def update_reg(self,reg, expr):
 		if reg.name in self.registers:
 			self.registers[reg.name] = expr
@@ -37,7 +38,8 @@ class state:
 			self.memory.update({str(addr.value):expr})
 
 
-#Is there a better way to do it than type checking?
+#output = 
+#push expr to value specified by output operand
 	def update_state(self,output,expr):
 		if type(output) == RegisterOperand:
 			self.update_reg(output, expr)
@@ -48,7 +50,7 @@ class state:
 		else:
 			print "Something in update_state went wrong"
 
-
+#Returns register if it exists, else returns fresh BitVec
 	def fetch_reg(self, reg):
 		if reg.name in self.registers:
 			return self.registers[reg.name]
@@ -91,10 +93,12 @@ class state:
 			return BitVecVal(op.value, op.size)
 		return 0
 
-
+#Symbolically execute a single step
 	def step(self, il_ins):
 		ins_handler[il_ins.opcode](self, il_ins)
 
+
+#TODO: rework to handle multiple basic blocks
 	def execute(self, instructions):
 		for ins in instructions:
 			for il_ins in ins.il_instructions:
