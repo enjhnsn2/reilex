@@ -1,3 +1,4 @@
+import reil.x86.translator as lift
 #Generating cfg
 #ID = unique identifier
 #Left =  if predicate evaluates to false, go to left block
@@ -16,25 +17,23 @@ class block:
 #Returns dictionary of id(start address of block) -> block
 #instructions should be lifted already
 #TODO: write second pass function to assign left and right pointers
+
+
 def gen_CFG(instructions):
 	blocks = {}
-	while 1:
-		myBlock = block()
-		for ins in instsructions:
-			if myBlock.id == -1:
-				myBlock.id = ins.address
-			myBlock.ins.append(ins)
-			if ends_basic_block(ins):
-				break
-		blocks.update(myBlock.id:myBlock)
+	myBlock = block()
+	myBlock.id = 0
+	for ins in instructions:
+		if myBlock.id == -1: #When we have a new block, assign an id
+			myBlock.id = ins.address
+		myBlock.ins.append(ins)
+
+		if ins.ends_basic_block: #We need to start a new block
+			blocks.update({myBlock.id:myBlock})
+			myBlock = block()	
+
+	blocks.update({myBlock.id:myBlock})
 	return blocks
 
 
-
-
-"""
-for ins in instrs_e:
-	print ins.address
-	for il_ins in ins.il_instructions:
-		print il_ins
-"""
+#Final block is getting tossed due to my logic mistake
