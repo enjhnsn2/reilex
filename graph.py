@@ -8,16 +8,14 @@ import reil.x86.translator as lift
 class block:
 	def __init__(self):
 		self.id = -1
-		self.left = 0
-		self.right = 0
+		self.left = -1
+		self.right = -1
 		self.ins = []
 
 
 #Set done somehow
 #Returns dictionary of id(start address of block) -> block
 #instructions should be lifted already
-#TODO: write second pass function to assign left and right pointers
-
 
 def gen_CFG(instructions):
 	blocks = {}
@@ -29,6 +27,9 @@ def gen_CFG(instructions):
 		myBlock.ins.append(ins)
 
 		if ins.ends_basic_block: #We need to start a new block
+			assert ins.il_instructions[-1].opcode == 5
+			myBlock.right = ins.il_instructions[-1].output.value #Deal with other jcc offsets
+			myBlock.left = ins.address + ins.size
 			blocks.update({myBlock.id:myBlock})
 			myBlock = block()	
 
@@ -37,3 +38,4 @@ def gen_CFG(instructions):
 
 
 #Final block is getting tossed due to my logic mistake
+#cfg_e[i].ins[-1].il_instructions[-1].opcode
