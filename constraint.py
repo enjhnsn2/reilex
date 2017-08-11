@@ -98,11 +98,31 @@ class state:
 		ins_handler[il_ins.opcode](self, il_ins)
 
 
-#TODO: rework to handle multiple basic blocks
+	def exec_block(self, instructions):
+		for ins in instructions:
+			for il_ins in ins.il_instructions:
+				self.step(il_ins)
+
+
+#TODO: executes single basic block
 	def execute(self, instructions):
 		for ins in instructions:
 			for il_ins in ins.il_instructions:
 				self.step(il_ins)
+
+#cfg = dictionary of basic blocks
+"""
+def execute_graph(init_state, cfg): 
+	init_state.execute()
+	execute(cfg[0])
+	execute(left)
+	execute(right)
+"""
+
+
+
+
+
 
 
 

@@ -21,12 +21,13 @@ instrs_e = e.lift()
 #	print ins
 #	for il_ins in ins.il_instructions:
 #		print il_ins
+"""
 
 cfg_a = gen_CFG(instrs_a)
 for i in cfg_a:
 	print i
 
-"""
+
 cfg_b = gen_CFG(instrs_b)
 for i in cfg_b:
 	print i
@@ -39,13 +40,14 @@ cfg_d = gen_CFG(instrs_d)
 for i in cfg_d:
 	print i
 
+"""
 cfg_e = gen_CFG(instrs_e)
 for i in cfg_e:
-	print i
-	print cfg_e[i]
+	jmp = cfg_e[i].ins[-1].il_instructions[-1]
+	print i, jmp, jmp.opcode == 5, cfg_e[i].left, cfg_e[i].right
 
 
-"""
+
 
 #new_state = state()
 #new_state.execute(instrs_e)
@@ -65,3 +67,30 @@ for i in cfg_e:
 #new_state.solver.add(ebp == 0)
 #print new_state.solver.check()
 #print new_state.solver.model()
+
+
+
+def verify_patch(filename):
+	elf = load_elf("tests/jmp_test")
+	lifted_instrs = elf.lift()
+	cfg = gen_CFG(lifted_instrs)
+
+	leaves = []
+
+	for block in cfg:
+		if block.left == -1 and block.right == -1:
+			leaves.append(block)
+		else:
+			
+
+	for i in leaves:
+
+	#We need to access all leaves of cfg tree
+	#How do we handle loops?
+
+
+
+
+
+
+

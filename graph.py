@@ -5,18 +5,21 @@ import reil.x86.translator as lift
 #Right = if predicate evaluates to true, go to right block
 #instrs = list of il_ins that are used in this block
 #ID = assigned from from jcc offset
+#end_state: state object that represents semantics of block
 class block:
 	def __init__(self):
 		self.id = -1
 		self.left = -1
 		self.right = -1
 		self.ins = []
+		self.end_state = -1
 
 
-#Set done somehow
-#Returns dictionary of id(start address of block) -> block
-#instructions should be lifted already
 
+#Input: set of lifted instructions
+#Output: dictionary of basic blocks
+#Dictionary = id:block where id is the start address of the basic block
+#Note: Basic blocks have been symbollically executed
 def gen_CFG(instructions):
 	blocks = {}
 	myBlock = block()
@@ -30,12 +33,13 @@ def gen_CFG(instructions):
 			assert ins.il_instructions[-1].opcode == 5
 			myBlock.right = ins.il_instructions[-1].output.value #Deal with other jcc offsets
 			myBlock.left = ins.address + ins.size
+			start_State = state()
+			myBlock.end_state = start_State.execute(myBlock.ins)
 			blocks.update({myBlock.id:myBlock})
 			myBlock = block()	
 
+	start_State = state()
+	myBlock.end_state = start_State.execute(myBlock.ins)
 	blocks.update({myBlock.id:myBlock})
 	return blocks
 
-
-#Final block is getting tossed due to my logic mistake
-#cfg_e[i].ins[-1].il_instructions[-1].opcode
