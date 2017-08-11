@@ -33,13 +33,13 @@ def gen_CFG(instructions):
 			assert ins.il_instructions[-1].opcode == 5
 			myBlock.right = ins.il_instructions[-1].output.value #Deal with other jcc offsets
 			myBlock.left = ins.address + ins.size
-			start_State = state()
-			myBlock.end_state = start_State.execute(myBlock.ins)
+#			start_State = state()
+#			myBlock.end_state = start_State.execute(myBlock.ins)
 			blocks.update({myBlock.id:myBlock})
 			myBlock = block()	
 
-	start_State = state()
-	myBlock.end_state = start_State.execute(myBlock.ins)
+#	start_State = state()
+#	myBlock.end_state = start_State.execute(myBlock.ins)
 	blocks.update({myBlock.id:myBlock})
 	return blocks
 
