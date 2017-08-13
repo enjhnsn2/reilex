@@ -1,16 +1,24 @@
+"""
+Module for constructing Control Flow Graphs (cfg) 
+CFG are represented with a dictionary of start_address:block
+Blocks here refer to basic blocks, i.e code sequence with no branches 
+besides at the entry and exit.
+
+Top Level Interface:
+gen_CFG(instructions): returns dictionary of id:block
+"""
 import reil.x86.translator as lift
-"""Module for constructing Control Flow Graphs (cfg) """
 
 class block:
-"""
-Class to represent basic block.
+	"""
+	Class to represent basic block.
 
-Attributes:
-ID = unique identifier, equivalent to start address of the basic block
-Left =  if predicate evaluates to false, go to left block
-Right = if predicate evaluates to true, go to right block
-instrs = list of il_ins that are used in this block
-"""
+	Attributes:
+	ID = unique identifier, equivalent to start address of the basic block
+	Left =  if predicate evaluates to false, go to left block
+	Right = if predicate evaluates to true, go to right block
+	instrs = list of il_ins that are used in this block
+	"""
 
 	def __init__(self):
 		"""Default constructor for block class"""
@@ -22,11 +30,11 @@ instrs = list of il_ins that are used in this block
 
 
 def gen_CFG(instructions):
-"""
-Generates CFG for a set of REIL instructions.
+	"""
+	Generates CFG for a set of REIL instructions.
 
-Output: dictionary of id:block where blocks are the basic blocks of this cfg
-"""
+	Output: dictionary of id:block where blocks are the basic blocks of this cfg
+	"""
 
 	blocks = {}
 	myBlock = block()

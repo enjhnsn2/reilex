@@ -1,10 +1,17 @@
+"""
+Module for verifying binary files
+Currently enumerates all end states of binary file
+Suffers from path explosion to a great extent, so
+it would be wise to use this mostly for verifying small patches
+
+Top-level interface: 
+verify_patch(filename): prints summary of all end states and some overall summary data
+"""
+
 from loader import *
 from execution import *
 from graph import *
 import copy
-
-
-
 
 #change end states to a generator
 def verify_patch(filename):
@@ -47,3 +54,4 @@ def verify_patch(filename):
 
 	for i in end_states:
 		print i.id
+		

@@ -1,7 +1,13 @@
+"""
+Module contains functions to symbolically execute REIL instructions
+
+Top Level Interface:
+state.step(): symbollically execute a single instruction on the state
+state.execute(): symbolically execute basic block on the state
+"""
+
 from handlers import *
 from reil.definitions import *
-
-
 
 class state:
 	def __init__(self):

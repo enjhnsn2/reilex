@@ -1,15 +1,23 @@
-from z3 import *
-#Array of function pointers to various instruction handlers
-#indexed by definitions of instructions in reil/definitions
-#Instruction definitions found in reil/definitions
+"""
+Module that containts functions to handle all REIL instructions
 
-#returns bitvector corresponding to post operation state
+Called by state.step() instruction
+Functions are called through array of function pointers (ins_handler)
+Full instruction definitions located in reil/definition
+
+Each instruction takes a state and a REIL instruction and updates the state by 
+symbollically executing the instruction
+"""
+
+from z3 import *
+
+
 
 
 #Fetch ops -> equalize size -> compute result -> correct size -> update state
 
 #TODO:--------------
-#handle_sex, handle_sys, handle_jcc
+#handle_sys, handle_jcc, handle_undef
 
 
 
@@ -60,10 +68,11 @@ def set_size_unsigned(BV, n):
 
 def handle_add(state, il_ins):
 	"""
-	Handles add instruction
+	Handles add instruction 
+	result = in0 + in1
 
-	Inputs: literal/register, literal/register
-	Side Effects: register
+	Input: literal/register, literal/register
+	Side Effects: updates register with result
 	"""
 	print "add_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -76,9 +85,11 @@ def handle_add(state, il_ins):
 def handle_and(state, il_ins):
 	"""
 	Handles and instruction
+	result = in0 & in1
 
-	Inputs: literal/register, literal/register
-	Side Effect: register
+
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "and_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -92,9 +103,11 @@ def handle_and(state, il_ins):
 def handle_bisz(state, il_ins):
 	"""
 	Handles bisz instruction
+	result = in0 == 0
 
-	Inputs: literal/register
-	Side Effect: register
+
+	Input: literal/register
+	Side Effect: updates register with result
 	"""
 	print "bisz_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -106,9 +119,11 @@ def handle_bisz(state, il_ins):
 def handle_bsh(state, il_ins):
 	"""
 	Handles bsh instruction
+	if in1 > 0: result = in0 << in1
+	if in0 < 0: result = in0 >> in1
 
-	Inputs: literal/register, literal/register
-	Side Effect: register
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "bsh_handled "
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -127,9 +142,10 @@ def handle_bsh(state, il_ins):
 def handle_div(state, il_ins):
 	"""
 	Handles div instruction.
+	result = in0 / in1 (unsigned)
 
-	Inputs: literal/register, literal/register
-	Side Effect: register
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "div_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -153,9 +169,10 @@ def handle_jcc(state, il_ins):
 def handle_ldm(state, il_ins):
 	"""
 	Handles ldm instruction
+	result = in0(memory)
 
-	Inputs: literal/register, literal is interpreted as memory access
-	Side Effect: register
+	Input: literal/register(memory)
+	Side Effect: updates register with result
 	"""
 	print "ldm_handled"
 	in0 = state.fetch_op_mem(il_ins.input0)
@@ -167,9 +184,10 @@ def handle_ldm(state, il_ins):
 def handle_mod(state, il_ins):
 	"""
 	Handles mod instruction
+	result = in0 % in1
 
-	Inputs: literal/register, literal/register
-	Side Effect: register
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "mod_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -183,9 +201,10 @@ def handle_mod(state, il_ins):
 def handle_mul(state, il_ins):
 	"""
 	Handles mul instruction
+	result = in0 * in1 (signed)
 
-	Inputs: literal/register, literal/register
-	Side Effects: register
+	Input: literal/register, literal/register
+	Side Effects: updates register with result
 	"""
 	print "mul_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -204,9 +223,10 @@ def handle_nop(state, il_ins):
 def handle_or(state, il_ins):
 	""" 
 	Handles or instruction
+	result = in0 | in1
 
-	Inputs: literal/register, literal/register
-	Side Effect: register
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "or_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -216,13 +236,14 @@ def handle_or(state, il_ins):
 	result = set_size_signed(result, il_ins.output.size)
 	state.update_state(il_ins.output, result)
 
-#TODO: reigster needs to store to memory at symbolic location
+#TODO: register needs to store to memory at symbolic location
 def handle_stm(state, il_ins):
 	"""
 	Handles stm instruction
+	result(memory) = in0
 
-	Inputs: literal/register
-	Side Effect: literal/register
+	Input: literal/register
+	Side Effect: updates memory at literal/register
 	"""
 	print "stm_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -234,9 +255,10 @@ def handle_stm(state, il_ins):
 def handle_str(state, il_ins):
 	"""
 	Handles str instruction
+	result = in0
 
-	Inputs: literal/register
-	Side Effect: register
+	Input: literal/register
+	Side Effect: updates register with result
 	"""
 	print "str_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -248,9 +270,10 @@ def handle_str(state, il_ins):
 def handle_sub(state, il_ins):
 	"""
 	Handles sub instruction
+	result = in0 - in1
 
-	Inputs: literal/register, literal/register
-	Side Effect: register
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "sub_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -261,7 +284,7 @@ def handle_sub(state, il_ins):
 	state.update_state(il_ins.output, result)
 
 
-#TODO: figure out some way to flag reigster as defined
+#TODO: figure out some way to flag register as defined
 #Flags register as undefined
 #Type specification: None -> Register 
 def handle_undef(state, il_ins):
@@ -279,9 +302,10 @@ def handle_ukn(state, il_ins):
 def handle_xor(state, il_ins):
 	"""
 	handles xor instruction
+	result = in0 ^ in1
 
-	Inputs: literal/register, literal/register
-	Side effects: register
+	Input: literal/register, literal/register
+	Side effects: updates register with result
 	"""
 	print "xor_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -295,9 +319,10 @@ def handle_xor(state, il_ins):
 def handle_bisnz(state, il_ins):
 	"""
 	handles bisnz instruction
-	
-	Inputs: literal/register
-	Side Effects: register
+	result = in0 != 0
+
+	Input: literal/register
+	Side Effects: updates register with result
 	"""
 	print "bisnz_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -306,13 +331,13 @@ def handle_bisnz(state, il_ins):
 	state.update_state(il_ins.output, result)
 
 
-#Type specification: literal/register, literal/register -> register
 def handle_equ(state, il_ins):
 	"""
 	handles equ instruction
+	result = in0 == in1
 
-	Inputs:
-	Side Effect: 
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
 	"""
 	print "equ_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
@@ -321,10 +346,16 @@ def handle_equ(state, il_ins):
 	result = (in0 == in1)
 	state.update_state(il_ins.output, result)
 
-#Type specification: literal/register, literal/register -> register
-def handle_lshl(state, il_ins):
-	print "lshl_handled"
 
+def handle_lshl(state, il_ins):
+	"""
+	Handles lshl instruction
+	result = in0 << in1
+
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
+	"""
+	print "lshl_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
 	in1 = state.fetch_op_lit(il_ins.input1)
 	in0, in1 = equalize_size(in0,in1)
@@ -333,8 +364,14 @@ def handle_lshl(state, il_ins):
 	state.update_state(il_ins.output, result)
 
 
-#Type specification: literal/register, literal/register -> register
 def handle_lshr(state, il_ins):
+	"""
+	Handles lshr instruction
+	result = in0 >> in1 (logical shift right)
+
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
+	"""
 	print "lshr_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
 	in1 = state.fetch_op_lit(il_ins.input1)
@@ -343,10 +380,16 @@ def handle_lshr(state, il_ins):
 	result = set_size_signed(result, il_ins.output.size)
 	state.update_state(il_ins.output, result)
 
-#Type specification: literal/register, literal/register -> register
-def handle_ashr(state, il_ins):
-	print "ashr_handled"
 
+def handle_ashr(state, il_ins):
+	"""
+	Handles ashr instruction
+	result = in0 >> in1 (arithmetic shift right)
+
+	Input: literal/register, literal/register
+	Side Effect: updates register with result
+	"""
+	print "ashr_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
 	in1 = state.fetch_op_lit(il_ins.input1)
 	in0, in1 = equalize_size(in0,in1)
@@ -354,10 +397,16 @@ def handle_ashr(state, il_ins):
 	result = set_size_signed(result, il_ins.output.size)
 	state.update_state(il_ins.output, result)
 
-#Type specification: literal/register, literal/register -> register
-def handle_sdiv(state, il_ins):
-	print "sdiv_handled"
 
+def handle_sdiv(state, il_ins):
+	"""
+	Handles sdiv instruction
+	result = in0 / in1 (signed)
+
+	Input: literal/register, literal/register
+	Side effect: updates register with result
+	"""
+	print "sdiv_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
 	in1 = state.fetch_op_lit(il_ins.input1)
 	in0, in1 = equalize_size(in0,in1)
@@ -366,18 +415,27 @@ def handle_sdiv(state, il_ins):
 	state.update_state(il_ins.output, result)
 
 
-#Same as STR, except it is sign extended
-#Type specification: literal/register -> register
 def handle_sex(state, il_ins):
-	print "sex_handled"
+	"""
+	Handle sex instruction
+	result = in0 (signed)
 
+	Input: literal/register
+	Side Effect: updates register with result
+	"""
+	print "sex_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
 	result = in0
 	result = set_size_signed(result, il_ins.output.size)
 	state.update_state(il_ins.output, result)
 
-#Type specification: ???????????
+
 def handle_sys(state, il_ins):
+	"""
+	Handles sys instruction
+
+	Unsure about how to handle this as of right now
+	"""
 	print "sys_handled"
 
 

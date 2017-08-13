@@ -1,23 +1,36 @@
-#TODO: determine correct shrtab
-#TODO: enums and stuff
+"""
+Module for loading binary files
+Currently only loades 32 and 64 bit elf files
+
+Top Level Interface: 
+Load_elf(filename): Returns populated ELF object
+"""
+
 #TODO: pretty printing
 #TODO: write some documentation
+#TODO: convert print functions to __str__()
+
 import struct
 import reil.x86.translator as lift
 
 def btoi8(f):
+	"""Converts 8 bytes of binary to integer """
 	return struct.unpack("Q",f.read(8))[0]
 def btoi4(f):
+	"""Converts 4 bytes of binary to integer """
 	return struct.unpack("I",f.read(4))[0]
 def btoi2(f):
+	"""Converts 2 bytes of binary to integer """
 	return struct.unpack("H",f.read(2))[0]
 def btoi1(f):
+	"""Converts 1 byte of binary to integer """
 	return struct.unpack("B",f.read(1))[0]
 
 
 class f_header:
-
+	"""Class for ELF file headers"""
 	def load32(self,f):
+		"""Loads file header for 32 bit elf files"""
 		f.seek(0)
 		self.ei_mag =   struct.unpack("ssss",f.read(4))
 		self.ei_class = btoi1(f)
@@ -42,6 +55,7 @@ class f_header:
 
 
 	def load64(self,f):
+		"""Loads file header for 64 bit elf files"""
 		f.seek(0)
 		self.ei_mag =   struct.unpack("ssss",f.read(4))
 		self.ei_class = btoi1(f)
@@ -65,6 +79,7 @@ class f_header:
 		self.shstrndx = btoi2(f)
 
 	def print_h(self):
+		"""Prints file header values """
 		print "magic: ", self.ei_mag
 		print "class: ",self.ei_class  
 		print "data: ", self.ei_data 
@@ -88,8 +103,12 @@ class f_header:
 
 
 class p_header:
-
+	"""
+	Class for ELF program headers.
+	There is 1 program header per segment in the ELF file.
+	"""
 	def load32(self,f,start):
+		"""Load program header for 32 bit ELF file"""
 		f.seek(start)
 		self.p_type = btoi4(f) 
 		self.p_offset = btoi4(f)
@@ -101,6 +120,7 @@ class p_header:
 		self.p_align = btoi4(f)
 
 	def load64(self,f,start):
+		"""Load program header for 32 bit ELF file"""
 		f.seek(start)
 		self.p_type = btoi4(f) 
 		self.p_flags = btoi4(f)
@@ -112,6 +132,7 @@ class p_header:
 		self.p_align = btoi8(f)
 
 	def print_h(self):
+		"""Prints program header values """
 		print "p_type: ", self.p_type 
 		print "p_offset: ", self.p_offset
 		print "p_vaddr: ", self.p_vaddr
@@ -122,8 +143,12 @@ class p_header:
 		print "p_align: ", self.p_align
 
 class s_header:
-
+	"""
+	Class for ELF section headers.
+	There is 1 section header per section in the ELF file.
+	"""
 	def load32(self,f,start):
+		"""Load section header for 32 bit ELF file"""
 		f.seek(start)
 		self.sh_name = btoi4(f)
 		self.sh_type = btoi4(f)
@@ -137,6 +162,7 @@ class s_header:
 		self.sh_entsize = btoi4(f)
 
 	def load64(self,f,start):
+		"""Load section header for 64 bit ELF file"""
 		f.seek(start)
 		self.sh_name = btoi4(f)
 		self.sh_type = btoi4(f)
@@ -150,6 +176,7 @@ class s_header:
 		self.sh_entsize = btoi8(f)
 
 	def print_h(self):
+		"""Prints section header values """
 		print "sh_name: ", self.sh_name 
 		print "sh_type", self.sh_type 
 		print "sh_flags: ", self.sh_flags 
@@ -162,13 +189,24 @@ class s_header:
 		print "sh_entsize: ", self.sh_entsize 
 
 
-#TODO, convert lists to dicts 
 class elf:
+	"""
+	Class for for loading elf files
+	
+	Attributes:
+	Filename:  file name of elf loaded
+	f_head: File header
+	p_headers: List of program headers
+	s_headers: List of section headers
+
+	"""
 	def __init__(self,filename):
+		"""Simple constructor"""
 		self.filename = filename
 
 
 	def load32(self):
+		"""Populate all metadata for 32 bit ELF"""
 		with open(self.filename, 'rb') as f:
 			self.f_head = f_header()
 			self.f_head.load32(f)
@@ -189,6 +227,7 @@ class elf:
 		self.text_size = self.get_text_size()
 
 	def load64(self):
+		"""Populate all metadata for 64 bit ELF"""
 		with open(self.filename, 'rb') as f:
 			self.f_head = f_header()
 			self.f_head.load64(f)
@@ -210,11 +249,17 @@ class elf:
 
 
 	def get_class(self):
+		"""
+		Return class field of ELF.
+		Class field is used to determine whether it is 32 or 64 bit.
+		"""
 		with open(self.filename, 'rb') as f:
 			f.seek(4)
 			return btoi1(f)
-	#Outputs start of text section
+
+
 	def get_text_start(self):
+		"""Returns offset of text section of ELF"""
 		strtab_off = 0
 		for i in self.s_headers:
 			if i.sh_type == 3:
@@ -232,6 +277,7 @@ class elf:
 
 
 	def get_text_size(self):
+		"""Returns size of text segment"""
 		strtab_off = 0
 		for i in self.s_headers:
 			if i.sh_type == 3:
@@ -248,6 +294,10 @@ class elf:
 					return i.sh_size
 
 	def lift(self):
+		"""
+		Lifts executable code to REIL
+		Output: generator of REIL instructions
+		"""
 		with open(self.filename,"r") as f:
 			f.seek(self.text_start)
 			content = f.read(self.text_size)
@@ -259,6 +309,10 @@ class elf:
 
 
 def load_elf(filename):
+	"""
+	Top level function for loading elf files
+	Output: populated elf object
+	"""
 	my_elf = elf(filename)
 
 	if my_elf.get_class() == 1:
