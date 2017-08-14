@@ -111,7 +111,8 @@ def handle_bisz(state, il_ins):
 	"""
 	print "bisz_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
-	result = (in0 == 0)
+	#result = (in0 == BitVecVal(0, in0.size()))
+	result = If(in0 == 0, BitVecVal(1, 1), BitVecVal(0, 1))
 	state.update_state(il_ins.output, result)
 
 
@@ -326,8 +327,8 @@ def handle_bisnz(state, il_ins):
 	"""
 	print "bisnz_handled"
 	in0 = state.fetch_op_lit(il_ins.input0)
-	print "in0 = ", in0
-	result = (in0 != 0)
+#	result = (in0 != BitVecVal(0, in0.size()))
+	result = If(in0 != 0, BitVecVal(1, 1), BitVecVal(0, 1))
 	state.update_state(il_ins.output, result)
 
 
@@ -343,7 +344,8 @@ def handle_equ(state, il_ins):
 	in0 = state.fetch_op_lit(il_ins.input0)
 	in1 = state.fetch_op_lit(il_ins.input1)
 	in0, in1 = equalize_size(in0,in1)
-	result = (in0 == in1)
+#	result = (in0 == in1)
+	result = If(in0 == in1, BitVecVal(1, 1), BitVecVal(0, 1))
 	state.update_state(il_ins.output, result)
 
 

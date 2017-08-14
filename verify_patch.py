@@ -30,12 +30,14 @@ def verify_patch(filename):
 		il_ins = cfg[i].ins[-1].il_instructions
 		print i, cfg[i].left, cfg[i].right, il_ins
 
-
-#TODO: handle this with a closure
+#Don't follow unsat paths
+#Duplicate end_States
+#Mark what conditions lead to what end state
+#Mark as "enumerate all end states"
 #Input: single state
 #Output: list of recursive states
 	def recursive_execute(state, block):
-		print "called!"
+		print "Block ID = ", block.id, block.left, block.right
 		if block.left == -1 and block.right == -1:
 			end_states.append(state)
 			return
@@ -53,5 +55,8 @@ def verify_patch(filename):
 	recursive_execute(init_state, init_block)
 
 	for i in end_states:
-		print i.id
-		
+		for j in i.registers:
+			print j, simplify(i.registers[j])
+		print "-----------------------"
+
+
