@@ -46,9 +46,58 @@ def verify_patch(filename):
 		state_left = copy.deepcopy(state)
 		state_right = copy.deepcopy(state)
 
-		if block.left != -1:
+		#TODO: make this into a proper function
+		jcc_in = block.ins[-1].il_instructions[-1].input0
+		if type(jcc_in) == RegisterOperand:
+			pivot_flag = jcc_in.name
+		elif type(jcc_in) == TemporaryOperand:
+			pivot_flag = jcc_in.name
+		elif type(jcc_in) == ImmediateOperand:
+			pivot_flag = jcc_in.value
+		else:
+			print "Pivot Flag Error"
+
+		print pivot_flag
+
+
+
+		def is_valid_path(state, block, path, pivot_flag):
+			"""Valid pivot flags := 0, 1 , register, temporaryRegister """
+			if pivot_flag == 1:
+				return path == block.right
+			if pivot_flag == 0:
+				return path == block.left
+			if path == -1:
+				return False
+
+			if type(jcc_in) == RegisterOperand:
+				pivot_expression = state.registers[pivot_flag]
+			elif type(jcc_in) == TemporaryOperand:
+				pivot_expression = state.temp_registers[pivot_flag]
+
+#			print simplify(pivot_expression)
+			if simplify(pivot_expression) == 0:
+				return (path == block.left)
+			if simplify(pivot_expression) == 1:
+				return (path == block.right)
+			state.solver.add(pivot_expression)
+			print state.solver.check()
+			#if not state.solver.check():
+			#	return (path == block.left)
+			
+			s = Solver()
+			s.add(Not(pivot_expression))
+			print s.check()
+			
+			if not s.check():
+				return (path == block.right)
+
+
+#		if block.left != -1:
+		if is_valid_path(state_left, block, block.left, pivot_flag):
 			recursive_execute(state_left, cfg[block.left])
-		if block.right != -1:
+#		if block.right != -1 and block.right != block.left:
+		if is_valid_path(state_right, block, block.right, pivot_flag) and block.right != block.left:
 			recursive_execute(state_right, cfg[block.right])
 
 
