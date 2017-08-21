@@ -1,6 +1,6 @@
 """
 This module is for misc functions that don't really fit elsewhere
-
+Right now mostly for extending REIL translation library
 """
 from reil.definitions import *
 
