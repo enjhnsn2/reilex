@@ -75,7 +75,10 @@ def recursive_execute(state, block, cfg, leaf_fn = None, leaf_args = None):
 
 
 
-
+def enumerate_end_states(init_state, init_block, cfg):
+    end_states = []
+    recursive_execute(init_state, init_block, cfg, leaf_fn = end_states.append, leaf_args = state)
+    return end_states
 
 
 #change end states to a generator
@@ -88,14 +91,12 @@ def verify_patch(filename):
     init_block = cfg[0]
     init_state = state()
     
-    
-    end_states = []
+    end_states = enumerate_end_states(init_state, init_block, cfg)   
 
-    for i in cfg:
-        il_ins = cfg[i].ins[-1].il_instructions
-        print i, cfg[i].left, cfg[i].right, il_ins
+#    for i in cfg:
+#        il_ins = cfg[i].ins[-1].il_instructions
+#        print i, cfg[i].left, cfg[i].right, il_ins
 
-    recursive_execute(init_state, init_block, cfg, leaf_fn = end_states.append, leaf_args = state)
 
     for i in end_states:
         print i.solver
@@ -105,10 +106,11 @@ def verify_patch(filename):
 
 
 #TODO-----------------
-#1. refactor
-#1.5 Add enumerate_end_states
 #2. show what conditions lead to which state
+#2.5 Change to pathing.py
+#2.75 make CLI in reilex.py 
 #3. make it better printable
+#3.5 refactor round 2
 #4. Comment
 #5. Test more
 #6. Final cleanup/make presentable

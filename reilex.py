@@ -12,7 +12,8 @@ for ins in instrs_e:
 """
 
 def main():
-	verify_patch("tests/jmp_test")
+#	verify_patch("tests/jmp_test")
+	verify_patch("tests/jcc_test")
 
 
 if __name__ == "__main__":
