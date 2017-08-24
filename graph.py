@@ -27,7 +27,11 @@ class block:
 		self.right = -1
 		self.ins = []
 
-
+	def is_leaf(self):
+		if (self.left == -1) and (self.right == -1):
+			return True
+		else:
+			return False
 
 def gen_CFG(instructions):
 	"""
