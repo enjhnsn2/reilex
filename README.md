@@ -1,6 +1,6 @@
 # reilex
 Symbolic execution engine using REIL (Reverse Engineering Intermediate Language)  
-Check out the wiki on the github page to find out more about the project.
+Check out the wiki (in progress) on the github page to find out more about the project.
 
 Requirements:   
 Z3  
