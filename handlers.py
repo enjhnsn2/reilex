@@ -410,6 +410,7 @@ def handle_sys(state, il_ins):
 	"""
 	pass
 
+#Table of function pointers to the handlers for each REIL instruction
 ins_handler = [
 	handle_add,
 	handle_and,

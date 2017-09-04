@@ -6,6 +6,7 @@ besides at the entry and exit.
 
 Top Level Interface:
 gen_CFG(instructions): returns dictionary of id:block
+bin_to_cfg: return control flow graph of binary
 """
 import reil.x86.translator as lift
 from reil.definitions import *

@@ -1,11 +1,9 @@
 """
-Module for verifying binary files
-Currently enumerates all end states of binary file
-Suffers from path explosion to a great extent, so
-it would be wise to use this mostly for verifying small patches
+Module for determining pathing strategies
 
 Top-level interface: 
-verify_patch(filename): prints summary of all end states and some overall summary data
+is_valid_path: check if a path is satisfiable
+recursive_execute: recursively execute over a control flow graph
 """
 
 from loader import *
@@ -126,7 +124,6 @@ def enumerate_end_states(init_state, init_block, cfg):
 
 
 #TODO-----------------
-#4. Comment
 #5 Update top level interface
 #6. Final cleanup/make presentable
 #7. Finish wiki
