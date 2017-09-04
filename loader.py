@@ -6,9 +6,6 @@ Top Level Interface:
 Load_elf(filename): Returns populated ELF object
 """
 
-#TODO: pretty printing
-#TODO: write some documentation
-#TODO: convert print functions to __str__()
 
 import struct
 import reil.x86.translator as lift

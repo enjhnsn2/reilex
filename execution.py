@@ -131,14 +131,7 @@ class state:
             for il_ins in ins.il_instructions:
                 self.step(il_ins)
 
-#cfg = dictionary of basic blocks
-"""
-def execute_graph(init_state, cfg): 
-    init_state.execute()
-    execute(cfg[0])
-    execute(left)
-    execute(right)
-"""
+
 
 
 
