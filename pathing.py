@@ -123,8 +123,3 @@ def enumerate_end_states(init_state, init_block, cfg):
 
 
 
-#TODO-----------------
-#5 Update top level interface
-#6. Final cleanup/make presentable
-#7. Finish wiki
-

@@ -107,7 +107,6 @@ def handle_bisz(state, il_ins):
 	state.update_state(il_ins.output, result)
 
 
-#TODO: We need a state split here
 def handle_bsh(state, il_ins):
 	"""
 	Handles bsh instruction
@@ -220,7 +219,6 @@ def handle_or(state, il_ins):
 	result = set_size_signed(result, il_ins.output.size)
 	state.update_state(il_ins.output, result)
 
-#TODO: register needs to store to memory at symbolic location
 def handle_stm(state, il_ins):
 	"""
 	Handles stm instruction
@@ -265,7 +263,6 @@ def handle_sub(state, il_ins):
 	state.update_state(il_ins.output, result)
 
 
-#TODO: figure out some way to flag register as defined
 #Flags register as undefined
 #Type specification: None -> Register 
 def handle_undef(state, il_ins):
