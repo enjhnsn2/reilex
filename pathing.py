@@ -13,7 +13,7 @@ import copy
 from helper import *
 
 
-def is_valid_path(state, block, path, pivot_flag, jcc_in):
+def is_valid_path(state, block, path, jcc_in):
     """ 
     Determines whether a particular path is satisfiable from the current state
     Inputs:
@@ -27,6 +27,8 @@ def is_valid_path(state, block, path, pivot_flag, jcc_in):
     """
 
     """Valid pivot flags := 0, 1 , register, temporaryRegister """
+
+    pivot_flag = val(jcc_in)
 
     if pivot_flag == 1:
         return path == block.right
@@ -55,43 +57,63 @@ def is_valid_path(state, block, path, pivot_flag, jcc_in):
     if not s.check():
         return (path == block.right)
     else: 
-        return (path == block.left)
+        return True
 
 
 
-def recursive_execute(state, block, cfg, leaf_fn = None, leaf_args = None, enter_fn = None, enter_args = None):
+
+
+def enumerate_end_states_h(state, block, cfg, end_states):
+    print block.id
+    state.execute(block.ins)
+
+    if block.is_leaf():
+        end_states.append(state)
+
+    state_left = copy.deepcopy(state)
+    state_right = copy.deepcopy(state)
+
+    jcc_in = block.ins[-1].il_instructions[-1].input0 #Return input operand of jcc
+
+    if is_valid_path(state_left, block, block.left, jcc_in):
+        enumerate_end_states_h(state_left, cfg[block.left], cfg, end_states)
+
+    if is_valid_path(state_right, block, block.right, jcc_in) and block.right != block.left:
+        enumerate_end_states_h(state_right, cfg[block.right], cfg, end_states)
+    
+
+
+
+def enumerate_end_states(init_state, init_block, cfg):
     """
-    Function to recursively execute over a control flow graph
-    Inputs:
-    state: Current state
-    block: Current block
-    cfg: Cfg to execute over
-    leaf_fn, leaf_args = leaf_fn(leaf_args) called whenever a leaf of the cfg is found
-    enter_fn, enter_args = enter_fn(enter_args) called whenever a new block is found
+    Returns a list of all reachable blocks from a particular block
+    Inputs: 
+    init_state: Initial state of execution, 
+    init_block: block to start at
+    cfg: CFG to execute over
+    Outputs: list of blocks
     """
-    #Note: leaf_fn and enter_fn are kind of hacky, will be fixed soon
-        if enter_fn != None:
-            enter_fn(enter_args)
+    end_states = []
+    enumerate_end_states_h(init_state, init_block, cfg, end_states)
+    return end_states
 
-        if block.is_leaf():
-            if leaf_fn != None:
-                leaf_fn(leaf_args)
-            return
+def enumerate_all_blocks_h(state, block, cfg, used_blocks):
+    
+    used_blocks.append(block.id)
 
-        state.execute(block.ins)
-        state_left = copy.deepcopy(state)
-        state_right = copy.deepcopy(state)
+    state.execute(block.ins)
 
-        jcc_in = block.ins[-1].il_instructions[-1].input0 #Return input operand of jcc
-        pivot_flag = val(jcc_in)
+    state_left = copy.deepcopy(state)
+    state_right = copy.deepcopy(state)
 
+    jcc_in = block.ins[-1].il_instructions[-1].input0 #Return input operand of jcc
+    
 
+    if is_valid_path(state_left, block, block.left, jcc_in):
+        enumerate_all_blocks_h(state_left, cfg[block.left], cfg, used_blocks)
 
-        if is_valid_path(state_left, block, block.left, pivot_flag, jcc_in):
-            recursive_execute(state_left, cfg[block.left], cfg, leaf_fn = leaf_fn, leaf_args = state_left, enter_fn = enter_fn, enter_args = block.left)
-
-        if is_valid_path(state_right, block, block.right, pivot_flag, jcc_in) and block.right != block.left:
-            recursive_execute(state_right, cfg[block.right], cfg, leaf_fn = leaf_fn, leaf_args=state_right, enter_fn = enter_fn, enter_args = block.right)
+    if is_valid_path(state_right, block, block.right, jcc_in) and block.right != block.left:
+        enumerate_all_blocks_h(state_right, cfg[block.right], cfg, used_blocks)
 
 
 def enumerate_all_blocks(init_state, init_block, cfg):
@@ -104,22 +126,6 @@ def enumerate_all_blocks(init_state, init_block, cfg):
     Outputs: list of blocks
     """
     used_blocks = []
-    recursive_execute(init_state, init_block, cfg, enter_fn = used_blocks.append, enter_args = init_block.id)
+    enumerate_all_blocks_h(init_state, init_block, cfg, used_blocks)
     return used_blocks
-
-def enumerate_end_states(init_state, init_block, cfg):
-    """
-    Returns a list of all possible end states from a given start state and start block
-    Inputs: 
-    init_state: Initial state of execution
-    init_block: block to start at
-    cfg: CFG to execute over
-    Outputs: list of end states
-    """
-    end_states = []
-    recursive_execute(init_state, init_block, cfg, leaf_fn = end_states.append, leaf_args = state)
-    return end_states
-
-
-
 

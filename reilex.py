@@ -66,7 +66,7 @@ def version():
     print "Version: 0.0"
 
 def main():
-"""Main function: reads command line and dispatches to functions"""
+    """Main function: reads command line and dispatches to functions"""
     parser = argparse.ArgumentParser(description='Symbolic Execution of REIL code')
     parser.add_argument('action', help = 'action to be performed')  
     parser.add_argument('filename', help = 'filename of binary you are analyzing')
