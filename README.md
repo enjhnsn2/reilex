@@ -5,3 +5,4 @@ Uses a modified version of the REIL Translation Library:  https://github.com/c01
 
 Requirements:   
 Z3  
+Capstone  
